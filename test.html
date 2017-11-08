@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/validate.js/validate.js"></script>
+    <script src="index.js"></script>
+    <script>
+
+        window.onload = function (){
+          validator.init({
+            form: 'form',
+            successClass: 'success',
+            errorClass: 'error',
+            errorMessageClass: 'error_message',
+            onChangeAnyElement: function (el, isValidElement){
+              console.log("onChangeAnyElement", el, isValidElement);
+            },
+            items: {
+              name: {
+                presence: true,
+                length: {minimum: 5},
+              },
+            }
+
+          });
+          document.getElementById('form').addEventListener('submit', function(e) {
+            console.log('uuu')
+            e.preventDefault();
+
+          }, false);
+        }
+
+    </script>
+    <style>
+        .error input {
+            border: 1px solid red;
+        }
+        .error_message {
+            display: none;
+        }
+        .error .error_message {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <form id="form" >
+        <div>
+            Name: <input name="name" type="text">
+            <span class="error_message"></span>
+        </div>
+        <div>
+            Age: <input name="age" type="text">
+        </div>
+        <div>
+            Gender: <input type="radio" name="gender" value="male"> Male <input type="radio" name="gender" value="female"> Female
+        </div>
+        <div>
+            Animal
+            <select name="animal">
+                <option>
+                <option value="cat">Cat
+                <option value="dog">Dog
+                <option value="horse">Horse
+            </select>
+        </div>
+        <div>
+            <input type="checkbox"> Smock
+        </div>
+        <div>
+            <button>Go !</button>
+        </div>
+    </form>
+
+<br>
+    <span onClick="validator.validateForm({checkNotValidated: false, markValidated: false})" >Validate: checkNotValidated: false, markValidated: false</span><br/>
+    <span onClick="validator.validateForm({checkNotValidated: false, markValidated: true})" >Validate: checkNotValidated: false, markValidated: true</span><br/>
+    <span onClick="validator.validateForm({checkNotValidated: true, markValidated: false})" >Validate: checkNotValidated: true, markValidated: false</span><br/>
+    <span onClick="validator.validateForm({checkNotValidated: true, markValidated: true})" >Validate: checkNotValidated: true, markValidated: true</span><br/>
+    <span onClick="validator.validateFormReset()" >Validate: Reset</span><br/>
+</body>
+</html>
