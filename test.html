@@ -21,6 +21,14 @@
                 presence: true,
                 length: {minimum: 5},
               },
+              animal: {
+                presence:{
+                  allowEmpty: false
+                },
+              },
+              smock: {
+                presence: true
+              }
             }
 
           });
@@ -59,14 +67,14 @@
         <div>
             Animal
             <select name="animal">
-                <option>
+                <option value="">
                 <option value="cat">Cat
                 <option value="dog">Dog
                 <option value="horse">Horse
             </select>
         </div>
         <div>
-            <input type="checkbox"> Smock
+            <input type="checkbox" name="smock"> Smock
         </div>
         <div>
             <button>Go !</button>
