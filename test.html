@@ -27,7 +27,10 @@
                 },
               },
               smock: {
-                presence: true
+                presence: {
+                  message: 'some error'
+                },
+
               }
             }
 
@@ -74,7 +77,8 @@
             </select>
         </div>
         <div>
-            <input type="checkbox" name="smock"> Smock
+            <input type="checkbox" name="smock" id="form.smock"> <label for="form.smock" >Smock</label>
+            <span class="error_message"></span>
         </div>
         <div>
             <button>Go !</button>

@@ -24,6 +24,7 @@ function validate(value, rules) {
 // :text,
 // [contenteditable],
     // .on( "click.validate", "select, option, [type='radio'], [type='checkbox']", delegate );
+  var elementsQueryForValidating = elementsQuery + ", [type='hidden'], [type='checkbox'], select ";
 
   var onChangeAnyElement;
 
@@ -63,11 +64,10 @@ function validate(value, rules) {
     if (items[ elementName ]) {
       if (elementType == 'checkbox'){
         if (items[ elementName ].presence){
-          var checked = el.getAttribute('checked');
           if (!el.checked){
             isValid = false;
-            if (items[ elementName ].message) {
-              message = items[ elementName ].message;
+            if (items[ elementName ].presence.message) {
+              message = items[ elementName ].presence.message;
             } else {
               message = ' is required';
             }
@@ -113,10 +113,12 @@ function validate(value, rules) {
     };
 
     formElement = document.getElementById( form );
+    /*
     formElement.addEventListener('submit', function(e) {
       e.preventDefault();
       // e.stopPropagation();
     }, true);
+    */
     document.querySelectorAll(elementsQuery).forEach(function(item){
       item.addEventListener('focusout', checkElement, true);
       item.addEventListener('keyup', checkElement, true);
@@ -140,7 +142,7 @@ function validate(value, rules) {
     );
 
     var isValid = true;
-    formElement.querySelectorAll(elementsQuery).forEach(function(el){
+    formElement.querySelectorAll(elementsQueryForValidating).forEach(function(el){
       var elementName = el.getAttribute('name');
       if (Array.isArray(params.ignore) && params.ignore.indexOf(elementName) > -1){
         return;
@@ -171,7 +173,7 @@ function validate(value, rules) {
 
   this.validateFormReset = function (){
 
-    formElement.querySelectorAll(elementsQuery).forEach(function(el) {
+    formElement.querySelectorAll(elementsQueryForValidating).forEach(function(el) {
       el.setAttribute('validated', false);
       el.removeAttribute('valid');
       el.parentNode.classList.remove("error");
