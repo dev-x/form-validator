@@ -4,7 +4,7 @@ function validate(value, rules) {
 }
 */
 (function FormValidator (exports, module, define) {
-  var self = this;
+  var _self = this;
 
   var form = null;
 
@@ -96,6 +96,24 @@ function validate(value, rules) {
   }
   // focusout.validator keyup.validator
 
+  this.initElement = function (el, type) {
+    if (!el) {
+      return;
+    }
+    switch (type) {
+    case 'select':
+      el.addEventListener('change', checkElement, true);
+      break;
+    case 'checkbox':
+      el.addEventListener('click', checkElement, true);
+    case 'radio':
+      break;
+    default:
+      el.addEventListener('focusout', checkElement, true);
+      el.addEventListener('keyup', checkElement, true);
+    }
+  }
+
   this.init = function (data){
     form = data.form;
     items = data.items;
@@ -120,14 +138,13 @@ function validate(value, rules) {
     }, true);
     */
     document.querySelectorAll(elementsQuery).forEach(function(item){
-      item.addEventListener('focusout', checkElement, true);
-      item.addEventListener('keyup', checkElement, true);
+      _self.initElement(item, '');
     });
     document.querySelectorAll("[type='radio'], [type='checkbox']").forEach(function(item){
-      item.addEventListener('click', checkElement, true);
+      _self.initElement(item, 'checkbox');
     });
     document.querySelectorAll("select").forEach(function(item){
-      item.addEventListener('change', checkElement, true);
+      _self.initElement(item, 'select');
     });
 
   },

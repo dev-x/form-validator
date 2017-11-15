@@ -21,6 +21,10 @@
                 presence: true,
                 length: {minimum: 5},
               },
+              info: {
+                presence: true,
+                length: {minimum: 10},
+              },
               animal: {
                 presence:{
                   allowEmpty: false
@@ -40,6 +44,11 @@
             e.preventDefault();
 
           }, false);
+        }
+
+        function addInfo(){
+          document.getElementById('info-block').innerHTML = 'Info: <input name="info" type="text"><span class="error_message"></span>';
+          validator.initElement(document.getElementById('info-block').querySelector('input'), 'text');
         }
 
     </script>
@@ -80,6 +89,8 @@
             <input type="checkbox" name="smock" id="form.smock"> <label for="form.smock" >Smock</label>
             <span class="error_message"></span>
         </div>
+        <div id="info-block">
+        </div>
         <div>
             <button>Go !</button>
         </div>
@@ -90,6 +101,7 @@
     <span onClick="validator.validateForm({checkNotValidated: false, markValidated: true})" >Validate: checkNotValidated: false, markValidated: true</span><br/>
     <span onClick="validator.validateForm({checkNotValidated: true, markValidated: false})" >Validate: checkNotValidated: true, markValidated: false</span><br/>
     <span onClick="validator.validateForm({checkNotValidated: true, markValidated: true})" >Validate: checkNotValidated: true, markValidated: true</span><br/>
-    <span onClick="validator.validateFormReset()" >Validate: Reset</span><br/>
+    <span onClick="validator.validateFormReset()" >Validate: Reset</span><br/><br/>
+    <span onClick="addInfo()" >Add Info</span><br/>
 </body>
 </html>
