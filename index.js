@@ -1,19 +1,19 @@
-
 (function (root, factory) {
-  console.log(root)
   if (typeof define === 'function' && define.amd) {
       // AMD. Register as an anonymous module.
-      define(['FormValidator'], function (b) {
-          // Also create a global in case some scripts
-          // that are loaded still are looking for
-          // a global even when an AMD loader is in use.
-          return (root.FormValidator = factory(b));
+      define(['validate.js'], function (validate) {
+          return (root.FormValidator = factory(validate));
       });
+  } else if (typeof module === 'object' && module.exports) {
+      // Node. Does not work with strict CommonJS, but
+      // only CommonJS-like environments that support module.exports,
+      // like Node.
+      module.exports = factory(require('validate.js'));
   } else {
       // Browser globals
-      root.FormValidator = factory(root.b);
+      root.FormValidator = factory(root.validate);
   }
-}(typeof self !== 'undefined' ? self : this, function (b) {
+}(typeof self !== 'undefined' ? self : this, function (validate) {
 
   return function FormValidator () {
     var _self = this;
@@ -210,8 +210,6 @@
       });
   
     };
-  
-    window.validator = this;
   
   }
 }));
