@@ -122,7 +122,8 @@
         break;
       default:
         el.addEventListener('focusout', checkElement, true);
-        el.addEventListener('keyup', checkElement, true);
+        el.addEventListener('input', checkElement, true);
+//        el.addEventListener('keyup', checkElement, true);
       }
     }
   
@@ -143,19 +144,22 @@
       };
   
       formElement = document.getElementById( form );
+      if (!formElement){
+        return;
+      }
       /*
       formElement.addEventListener('submit', function(e) {
         e.preventDefault();
         // e.stopPropagation();
       }, true);
       */
-      document.querySelectorAll(elementsQuery).forEach(function(item){
+      formElement.querySelectorAll(elementsQuery).forEach(function(item){
         _self.initElement(item, '');
       });
-      document.querySelectorAll("[type='radio'], [type='checkbox']").forEach(function(item){
+      formElement.querySelectorAll("[type='radio'], [type='checkbox']").forEach(function(item){
         _self.initElement(item, 'checkbox');
       });
-      document.querySelectorAll("select").forEach(function(item){
+      formElement.querySelectorAll("select").forEach(function(item){
         _self.initElement(item, 'select');
       });
   
