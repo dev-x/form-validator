@@ -17,12 +17,16 @@
 
   return function FormValidator () {
     var _self = this;
-  
+
     var form = null;
-  
+
     var items = {};
-  
+
+    var onlyDefinedElements = false;
+
     var formElement = null;
+
+    var elements
   // "focusin.validator focusout.validator keyup.validator"
     /*
     var elementsQuery = "[type='text'], [type='password'], [type='file'], select, textarea, [type='number'], [type='search'], " +
@@ -30,22 +34,39 @@
       "[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], " +
       "[type='radio'], [type='checkbox'], [type='button']";
   */
-    var elementsQuery = "[type='text'], [type='password'], [type='file'], textarea, [type='number'], [type='search'], " +
-      "[type='tel'], [type='url'], [type='email'], [type='datetime'], [type='date'], [type='month'], " +
-      "[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color']";
+    var elementsQueryArray = [
+      "[type='text']",
+      "[type='password']",
+      "[type='file']",
+      "[type='number']",
+      "[type='search']",
+      "[type='tel']",
+      "[type='url']",
+      "[type='email']",
+      "[type='datetime']",
+      "[type='date']",
+      "[type='month']",
+      "[type='week']",
+      "[type='time']",
+      "[type='datetime-local']",
+      "[type='range']",
+      "[type='color']",
+      "textarea",
+    ];
+    var elementsQuery = elementsQueryArray.join(', ');
   // :text,
   // [contenteditable],
       // .on( "click.validate", "select, option, [type='radio'], [type='checkbox']", delegate );
     var elementsQueryForValidating = elementsQuery + ", [type='hidden'], [type='checkbox'], select ";
-  
+
     var onChangeAnyElement;
-  
+
     var extraValidate;
-  
+
     var successClass = 'success';
     var errorClass = 'error';
     var errorMessageClass = 'error_message';
-  
+
     function markElement(el, isValidElement, message){
       if (!isValidElement) {
         // https://developer.mozilla.org/ru/docs/Web/API/Element/classList
@@ -55,7 +76,7 @@
           toggle method's  24 	    24 (24) 	        not supported 	    15 	    yes (Баг WebKit 99375)
           second argument
         */
-  
+
         el.parentNode.classList.remove(successClass);
         el.parentNode.classList.add(errorClass);
         if (el.parentNode.querySelector("."+errorMessageClass)){
@@ -65,9 +86,9 @@
         el.parentNode.classList.remove("error");
         el.parentNode.classList.add("success");
       }
-  
+
     }
-  
+
     function checkElementRaw(el) {
       var elementName = el.getAttribute('name');
       var elementType = el.getAttribute('type');
@@ -95,22 +116,27 @@
       }
       return {isValid: isValid, message: message};
     }
-  
+
     function checkElement(e){
   //        e.preventDefault();
       var res = checkElementRaw(e.target);
       markElement(e.target, res.isValid, res.message);
-  
+
       if (onChangeAnyElement){
         onChangeAnyElement(e, res.isValid, res.message)
       }
-  
+
     }
     // focusout.validator keyup.validator
-  
+
     this.initElement = function (el, type) {
       if (!el) {
         return;
+      }
+      if (onlyDefinedElements){
+        if (!items.hasOwnProperty(el.name)){
+          return;
+        }
       }
       switch (type) {
       case 'select':
@@ -126,23 +152,25 @@
 //        el.addEventListener('keyup', checkElement, true);
       }
     }
-  
+
     this.init = function (data){
       form = data.form;
       items = data.items;
-  
+
+      onlyDefinedElements = data.onlyDefinedElements;
+
       onChangeAnyElement = data.onChangeAnyElement;
-  
+
       successClass      = data.successClass || 'success';
       errorClass        = data.errorClass || 'error';
       errorMessageClass = data.errorMessageClass || 'error_message';
-  
+
       extraValidate = data.extraValidate || null;
-  
+
       elements = {
-  
+
       };
-  
+
       formElement = document.getElementById( form );
       if (!formElement){
         return;
@@ -162,9 +190,9 @@
       formElement.querySelectorAll("select").forEach(function(item){
         _self.initElement(item, 'select');
       });
-  
+
     },
-  
+
     this.validateForm = function (params){
       if (!params) {
         params = {};
@@ -173,7 +201,7 @@
         {checkNotValidated: false, markValidated: false, ignore: []},
         params
       );
-  
+
       var isValid = true;
       formElement.querySelectorAll(elementsQueryForValidating).forEach(function(el){
         var elementName = el.getAttribute('name');
@@ -200,20 +228,20 @@
           isValid = false;
         }
       }
-  
+
       return isValid;
     };
-  
+
     this.validateFormReset = function (){
-  
+
       formElement.querySelectorAll(elementsQueryForValidating).forEach(function(el) {
         el.setAttribute('validated', false);
         el.removeAttribute('valid');
         el.parentNode.classList.remove("error");
         el.parentNode.classList.remove("success");
       });
-  
+
     };
-  
+
   }
 }));
