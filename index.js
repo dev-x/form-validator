@@ -51,13 +51,14 @@
       "[type='datetime-local']",
       "[type='range']",
       "[type='color']",
+      "[type='hidden']", 
       "textarea",
     ];
     var elementsQuery = elementsQueryArray.join(', ');
   // :text,
   // [contenteditable],
       // .on( "click.validate", "select, option, [type='radio'], [type='checkbox']", delegate );
-    var elementsQueryForValidating = elementsQuery + ", [type='hidden'], [type='checkbox'], select ";
+    var elementsQueryForValidating = elementsQuery + ", [type='checkbox'], select ";
 
     var onChangeAnyElement;
 
