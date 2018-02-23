@@ -26,6 +26,8 @@
 
     var formElement = null;
 
+    this.event = new Event('force-update');
+
     var elements
   // "focusin.validator focusout.validator keyup.validator"
     /*
@@ -139,6 +141,7 @@
           return;
         }
       }
+      console.log('el', el)
       switch (type) {
       case 'select':
         el.addEventListener('change', checkElement, true);
@@ -150,11 +153,14 @@
       default:
         el.addEventListener('focusout', checkElement, true);
         el.addEventListener('input', checkElement, true);
+        el.addEventListener('force-update', checkElement, true);
+        
 //        el.addEventListener('keyup', checkElement, true);
       }
     }
 
     this.init = function (data){
+      console.log('init', data.form, Object.keys(data.items))
       form = data.form;
       items = data.items;
 
@@ -199,13 +205,21 @@
         params = {};
       }
       params = Object.assign({},
-        {checkNotValidated: false, markValidated: false, ignore: []},
+        {checkNotValidated: false, markValidated: false, ignore: [], validateOnly: null},
         params
       );
-
+console.log('validateForm', form, params)
       var isValid = true;
       formElement.querySelectorAll(elementsQueryForValidating).forEach(function(el){
         var elementName = el.getAttribute('name');
+        if (onlyDefinedElements){
+          if (!items.hasOwnProperty(el.name)){
+            return;
+          }
+        }
+        if (Array.isArray(params.validateOnly) && params.validateOnly.indexOf(elementName) < 0){
+          return;
+        }
         if (Array.isArray(params.ignore) && params.ignore.indexOf(elementName) > -1){
           return;
         }
