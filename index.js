@@ -26,6 +26,8 @@
 
     var formElement = null;
 
+    var keyAttribute = 'name';
+
     this.event = new Event('force-update');
 
     var elements
@@ -93,7 +95,7 @@
     }
 
     function checkElementRaw(el) {
-      var elementName = el.getAttribute('name');
+      var elementName = el.getAttribute(keyAttribute);
       var elementType = el.getAttribute('type');
       var isValid = true;
       var message = '';
@@ -136,12 +138,14 @@
       if (!el) {
         return;
       }
+      
+      let key = el.getAttribute(keyAttribute);
       if (onlyDefinedElements){
-        if (!items.hasOwnProperty(el.name)){
+        if (!key || !items.hasOwnProperty(key)){
           return;
         }
       }
-      console.log('el', el)
+
       switch (type) {
       case 'select':
         el.addEventListener('change', checkElement, true);
@@ -160,7 +164,6 @@
     }
 
     this.init = function (data){
-      console.log('init', data.form, Object.keys(data.items))
       form = data.form;
       items = data.items;
 
@@ -168,6 +171,10 @@
 
       onChangeAnyElement = data.onChangeAnyElement;
 
+      if (data.keyAttribute){
+        keyAttribute = data.keyAttribute;
+      }
+      
       successClass      = data.successClass || 'success';
       errorClass        = data.errorClass || 'error';
       errorMessageClass = data.errorMessageClass || 'error_message';
@@ -208,12 +215,12 @@
         {checkNotValidated: false, markValidated: false, ignore: [], validateOnly: null},
         params
       );
-console.log('validateForm', form, params)
+
       var isValid = true;
       formElement.querySelectorAll(elementsQueryForValidating).forEach(function(el){
-        var elementName = el.getAttribute('name');
+        var elementName = el.getAttribute(keyAttribute);
         if (onlyDefinedElements){
-          if (!items.hasOwnProperty(el.name)){
+          if (!items.hasOwnProperty(elementName)){
             return;
           }
         }

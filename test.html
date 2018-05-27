@@ -14,6 +14,7 @@
             successClass: 'success',
             errorClass: 'error',
             errorMessageClass: 'error_message',
+            keyAttribute: 'name2',
             onChangeAnyElement: function (el, isValidElement){
               console.log("onChangeAnyElement", el, isValidElement);
             },
@@ -68,18 +69,18 @@
 <body>
     <form id="form" >
         <div>
-            Name: <input name="name" type="text">
+            Name: <input name2="name" type="text">
             <span class="error_message"></span>
         </div>
         <div>
-            Age: <input name="age" type="text">
+            Age: <input name2="age" type="text">
         </div>
         <div>
-            Gender: <input type="radio" name="gender" value="male"> Male <input type="radio" name="gender" value="female"> Female
+            Gender: <input type="radio" name2="gender" value="male"> Male <input type="radio" name="gender" value="female"> Female
         </div>
         <div>
             Animal
-            <select name="animal">
+            <select name2="animal">
                 <option value="">
                 <option value="cat">Cat
                 <option value="dog">Dog
@@ -87,7 +88,7 @@
             </select>
         </div>
         <div>
-            <input type="checkbox" name="smock" id="form.smock"> <label for="form.smock" >Smock</label>
+            <input type="checkbox" name2="smock" id="form.smock"> <label for="form.smock" >Smock</label>
             <span class="error_message"></span>
         </div>
         <div id="info-block">
